@@ -1,11 +1,11 @@
 import './App.css'
 import Greeting from './components/Greeting'
-import Navbar from './components/Navbar.tsx'
+import Navbar from './components/Navbar'
 function App() {
   return (
     <div className="App">
       <Navbar />
-      <Greeting />
+      <Greeting name="Tle" />
     </div>
   )
 }
