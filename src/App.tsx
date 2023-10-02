@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <Navbar />
-      <Greeting name="Tle" />
+      <Greeting name="Tle" greetingMsg="Hello!" isLoggedIn={true} />
     </div>
   )
 }
