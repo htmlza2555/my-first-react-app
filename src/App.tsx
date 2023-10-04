@@ -3,7 +3,7 @@ import './App.css'
 import Greeting from './components/Greeting'
 import Navbar from './components/Navbar'
 import Post from './components/Post'
-import { PostDTO } from './types/dto'
+import { CreatePostDTO, PostDTO } from './types/dto'
 import axios from 'axios'
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
   const [newTitle, setNewTitle] = useState<string>('')
   const [newBody, setNewBody] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [isPosting, setIsPosting] = useState<boolean>(false)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,21 +36,28 @@ function App() {
     fetchData()
   }, [])
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
 
-    if (!posts) return
-
-    const currentPosts = [...posts]
-
-    currentPosts.push({
-      id: Math.floor(Math.random() * 1000), // * database should generate id for us
+    const newPostBody: CreatePostDTO = {
       userId: Math.floor(Math.random() * 1000),
       title: newTitle,
       body: newBody,
-    })
+    }
 
-    setPosts(currentPosts)
+    setIsPosting(true)
+    try {
+      // * axios post request
+      const res = await axios.post<PostDTO>('https://jsonplaceholder.typicode.com/posts', newPostBody, {
+        headers: { 'Content-Type': 'application/json' },
+      })
+
+      console.log(res.data)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setIsPosting(false)
+    }
 
     // * Clear form after set posts
     setNewTitle('')
@@ -69,7 +77,9 @@ function App() {
         <label>Body</label>
         <input type="text" value={newBody} onChange={(e) => setNewBody(e.target.value)} required />
 
-        <button type="submit">Submit</button>
+        <button type="submit" disabled={isPosting}>
+          {isPosting ? 'Posting' : 'Post'}
+        </button>
       </form>
 
       <div className="feed-container">
