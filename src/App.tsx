@@ -1,38 +1,44 @@
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useState } from 'react'
 import './App.css'
+import Greeting from './components/Greeting'
 import Navbar from './components/Navbar'
 import Post from './components/Post'
 import { PostDTO } from './types/dto'
-import Greeting from './components/Greeting'
-
-const initialPosts: PostDTO[] = [
-  {
-    id: 1,
-    userId: 1,
-    title: "Let's learn React!",
-    body: 'quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto',
-  },
-  {
-    id: 2,
-    userId: 2,
-    title: 'How to install Node.js',
-    body: 'quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto',
-  },
-  {
-    id: 3,
-    userId: 3,
-    title: 'Basic HTML',
-    body: 'quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto',
-  },
-]
+import axios from 'axios'
 
 function App() {
-  const [posts, setPosts] = useState<PostDTO[]>(initialPosts)
+  const [posts, setPosts] = useState<PostDTO[] | null>(null)
   const [newTitle, setNewTitle] = useState<string>('')
   const [newBody, setNewBody] = useState<string>('')
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true)
+      try {
+        // const res = await fetch('https://jsonplaceholder.typicode.com/posts')
+        // const data = await res.json()
+
+        // if (!res.ok) {
+        //   throw new Error('error')
+        // }
+        const res = await axios.get<PostDTO[]>('https://jsonplaceholder.typicode.com/posts')
+
+        setPosts(res.data)
+      } catch (err) {
+        console.error(err)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
+
+    if (!posts) return
 
     const currentPosts = [...posts]
 
@@ -45,14 +51,17 @@ function App() {
 
     setPosts(currentPosts)
 
+    // * Clear form after set posts
     setNewTitle('')
     setNewBody('')
   }
 
+  if (isLoading) return <h1>Loading...</h1>
+
   return (
     <div className="App">
       <Navbar />
-      <Greeting name="Tle" greetingMsg="Hello!" isLoggedIn={true} />
+      <Greeting name="Bun" isLoggedIn={true} />
 
       <form onSubmit={handleSubmit}>
         <label>Title</label>
@@ -64,9 +73,10 @@ function App() {
       </form>
 
       <div className="feed-container">
-        {posts.map((post) => {
-          return <Post key={post.id} post={post} />
-        })}
+        {posts &&
+          posts.map((post) => {
+            return <Post key={post.id} post={post} />
+          })}
       </div>
     </div>
   )
