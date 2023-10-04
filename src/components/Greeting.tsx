@@ -3,7 +3,6 @@ import classes from './Greeting.module.css'
 
 interface IGreetingProps {
   name: string
-  greetingMsg: string
   isLoggedIn: boolean
 }
 
@@ -18,7 +17,7 @@ const Greeting = ({ name, isLoggedIn }: IGreetingProps) => {
     <>
       <div className={classes.card}>
         <h3>{greetingMsg}</h3>
-        <p>{isLoggedIn ? name : 'Who are you ?'}</p>
+        <p>{isLoggedIn ? name : 'Unknown'}</p>
       </div>
       <button onClick={handleClick}>Change greeting message</button>
     </>
