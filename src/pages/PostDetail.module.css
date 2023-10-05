@@ -1,0 +1,11 @@
+.feedContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 800px;
+  width: 100%;
+  height: auto;
+  background-color: #c8c8c8;
+  padding: 10px 8px;
+  border-radius: 6px;
+  align-items: center;
+}
