@@ -1,9 +1,11 @@
 import { FormEvent, useState } from 'react'
 import classes from './Login.module.css'
 import { useAuth } from '../providers/AuthProvider'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
   const { login } = useAuth()
+  const navigate = useNavigate()
   const [username, setUsername] = useState<string>('')
   const [password, setPassword] = useState<string>('')
 
@@ -12,6 +14,8 @@ const Login = () => {
 
     try {
       await login(username, password)
+
+      navigate('/')
     } catch (err) {
       console.log(err)
     }
