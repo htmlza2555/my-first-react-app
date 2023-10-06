@@ -7,8 +7,7 @@ const Home = () => {
   const { posts, isLoading } = usePosts()
   const { isLoggedIn } = useAuth()
 
-  console.log('form home:', isLoggedIn)
-
+  console.log(isLoggedIn)
   if (isLoading) return <h1>Loading...</h1>
 
   return (
