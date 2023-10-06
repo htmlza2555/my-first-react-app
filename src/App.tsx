@@ -32,5 +32,8 @@ function App() {
 - สร้าง <BrowserRouter> ใน main ก่อน
 - แสดงผล Navbar ทุกหน้า 
 - สร้าง Routes เพื่อแยกแสดงผลใน path
-- แยก path แสดงแค่ใน path นั้นๆจาก pages */
+- แยก path แสดงแค่ใน path นั้นๆจาก pages
+- GuardedRote เช็ค isRouteAccessible 
+ถ้า isLoggedIn เป็น true ไปที่ path /login (เช็คแค่ใน Route)
+*/
 export default App
